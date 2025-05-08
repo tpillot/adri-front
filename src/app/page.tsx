@@ -8,10 +8,7 @@ export default async function Home() {
       video:  Media;
     };
   }>("/home?populate=video")
-  const videoUrl  = json.data.video  ? `${API_URL}${json.data.video.url}`   : undefined;
-  // const posterUrl = json.data.poster ? `${API_URL}${json.data.poster.url}` : undefined;
-
-  console.log({json, API_URL, videoUrl});
+  const videoUrl  = json.data.video ? `${API_URL}${json.data.video.url}` : undefined;
 
   return (
     <main className="relative h-screen w-screen overflow-hidden">
