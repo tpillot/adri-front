@@ -25,7 +25,7 @@ export default async function Page() {
         </div>
       </div>
 
-      <div className="bg-cover bg-center h-[500px] lg:h-full lg:w-[40%] rounded-sm" style={{ backgroundImage: `url('${API_URL}${json.data.photo.url}')` }}></div>
+      <div className="bg-cover bg-center h-[500px] lg:h-full lg:w-[40%] rounded-sm shrink-0" style={{ backgroundImage: `url('${API_URL}${json.data.photo.url}')` }}></div>
     </main>
   );
 }
