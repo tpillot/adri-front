@@ -8,55 +8,70 @@ import { usePathname } from "next/navigation";
 type HeaderProps = { logoUrl: string };
 
 export default function Header({ logoUrl }: HeaderProps) {
-  const isHome = usePathname() === "/";
+  const pathname = usePathname();
+  const isHome = pathname === "/";
+
+  const classNames = [
+    "w-full",
+    "flex",
+    "flex-col",
+    "items-center",
+    "justify-between",
+    "fixed",
+    "z-1",
+    "h-[130px]",
+    "top-0",
+    'py-[20px]',
+    isHome ? "top-[calc(50%-65px)]" : "",
+    "transition-top",
+    "duration-200",
+  ].filter(Boolean);
 
   return (
-    <header
-      className={
-        isHome
-          ? "fixed inset-0 z-20 flex items-center justify-center"
-          : "absolute top-0 left-0 z-20 w-full"
-      }
-    >
-      <div
-        className={
-          isHome
-            ? "flex flex-col items-center gap-8 text-center"
-            : "flex items-center justify-between w-full px-6 py-4"
-        }
-      >
-        {/* Logo */}
+    <header className={classNames.join(" ")}>
+      <Link href={"/"}>
         <Image
           src={logoUrl}
           alt="120 Production"
-          width={isHome ? 320 : 180}
-          height={isHome ? 100 : 60}
+          width={240}
+          height={0}
           priority
-          className="object-contain"
+          className="h-auto"
         />
+      </Link>
 
-        {/* Navigation */}
-        <nav>
-          <ul
-            className={`list-none flex gap-x-12 ${
-              isHome ? "mt-4 text-lg font-semibold" : "text-base font-medium"
-            }`}
-          >
-            {[
-              { href: "/projets", label: "PROJETS" },
-              { href: "/nous", label: "NOUS" },
-              { href: "/contact", label: "CONTACT" },
-            ].map(({ href, label }) => (
-              <li key={href}>
-                <Link href={href} className="hover:opacity-80">
-                  {label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
-        <div className="text-white">TEST</div>
-      </div>
+      <nav className="flex gap-4">
+        {[
+          { href: "/projets", label: "PROJETS" },
+          { href: "/nos-references", label: "NOUS" },
+          { href: "/contact", label: "CONTACT" },
+        ].map(({ href, label }) => {
+          const isActive = pathname === href;
+          const classNames = [
+            "relative",
+            "block",
+            "after:block",
+            "after:absolute",
+            "after:content-['']",
+            "after:h-[2px]",
+            "after:bg-white",
+            "after:transform-[translateX(-50%)]",
+            "after:left-1/2",
+            "after:transition-width",
+            "after:duration-200",
+            "after:w-0",
+            isActive ? "after:w-full" : "",
+            "text-sm",
+          ].filter(Boolean).join(" ");
+          return (
+            <div key={href}>
+              <Link href={href} className={classNames}>
+                {label}
+              </Link>
+            </div>
+          );
+        })}
+      </nav>
     </header>
   );
 }

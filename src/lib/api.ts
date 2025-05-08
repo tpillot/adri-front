@@ -10,12 +10,9 @@ export async function fetchStrapi<T>(path: string): Promise<T> {
     url.searchParams.set("populate", "*");
   }
 
-  try {
-    const res = await axios.get<T>(url.href, {
-      headers: { "Content-Type": "application/json" },
-    });
-    return res.data;
-  } catch (error: any) {
-    throw new Error(`Strapi ${error.response?.statusText || error.message}`);
-  }
+  const res = await axios.get<T>(url.href, {
+    headers: { "Content-Type": "application/json" },
+  });
+  
+  return res.data;
 }

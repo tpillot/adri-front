@@ -1,13 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-/*— Reset de la couleur et du soulignement du lien navigateur —*/
-/* a,
-a:visited {
-  color: inherit !important;
-  text-decoration: none !important;
-} */
+@import "tailwindcss";
 
 /*— Full-page background —*/
 html,
@@ -15,4 +6,5 @@ body,
 #__next {
   height: 100%;
   background: #000;
+  @apply text-white;
 }

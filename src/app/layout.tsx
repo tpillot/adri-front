@@ -18,7 +18,6 @@ export const metadata = {
 
 async function getLogo(): Promise<string> {
   const { data } = await fetchStrapi<{ data: { logo: { url: string } } }>("/header");
-  console.log(`${API_URL}${data.logo.url}`);
   return `${API_URL}${data.logo.url}`;
 }
 
