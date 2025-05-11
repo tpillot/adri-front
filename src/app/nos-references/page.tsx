@@ -6,13 +6,13 @@ export default async function Page() {
   }>("/nous?populate=*");
 
   return (
-    <main className="relative h-screen w-screen pt-[130px] flex flex-col lg:pr-[50px] lg:flex-row">
+    <main className="relative h-screen w-screen pt-[150px] flex flex-col lg:pr-[50px] lg:flex-row">
       <div className="flex flex-col flex-1 px-[100px] py-[50px]">
-        <p className="text-[40px] font-bold">
+        <p className="text-[40px] leading-[1.2]">
           {json.data.titre}
         </p>
 
-        <p className="text-lg mt-[40px] whitespace-pre-line leading-[1.2]">
+        <p className="text-lg mt-[40px] whitespace-pre-line leading-[1.2] font-thin">
           {json.data.presentation}
         </p>
 

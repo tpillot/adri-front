@@ -8,6 +8,7 @@ export default async function Home() {
       video:  Media;
     };
   }>("/home?populate=video")
+
   const videoUrl  = json.data.video ? `${API_URL}${json.data.video.url}` : undefined;
 
   return (
