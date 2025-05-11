@@ -46,7 +46,7 @@ export default function Header({ logoUrl }: HeaderProps) {
           { href: "/nos-references", label: "NOUS" },
           { href: "/contact", label: "CONTACT" },
         ].map(({ href, label }) => {
-          const isActive = pathname === href;
+          const isActive = pathname.startsWith(href);
           const classNames = [
             "relative",
             "block",
