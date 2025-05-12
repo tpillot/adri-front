@@ -41,7 +41,7 @@ export default async function Page() {
             </a>
           </div>
         </div>
-        <div className="flex justify-evenly">
+        <div className="flex flex-col gap-8 sm:justify-evenly sm:flex-row sm:gap-0">
           {json.data.fondateurs.map((f: any, index: number) => {
             return (
               <Contact

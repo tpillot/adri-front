@@ -3,6 +3,7 @@ import "./globals.css";
 import { fetchStrapi, API_URL } from "@/lib/api";
 import Header from "@/components/Header";
 import { ReactNode } from "react";
+
 // import { Space_Grotesk, Poppins } from "next/font/google";
 
 // const spaceGrotesk = Space_Grotesk({

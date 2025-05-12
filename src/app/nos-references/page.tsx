@@ -7,7 +7,7 @@ export default async function Page() {
 
   return (
     <main className="relative h-screen w-screen pt-[150px] flex flex-col lg:pr-[50px] lg:flex-row">
-      <div className="flex flex-col flex-1 px-[100px] py-[50px]">
+      <div className="flex flex-col flex-1 px-[20px] sm:px-[100px] py-[50px]">
         <p className="text-[40px] leading-[1.2]">
           {json.data.titre}
         </p>

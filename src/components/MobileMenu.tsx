@@ -1,53 +1,36 @@
-// components/Header.tsx
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu } from "lucide-react";
-import { useState } from "react";
-import MobileMenu from "./MobileMenu";
 
-type HeaderProps = { logoUrl: string };
+type MobileMenuProps = {
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
+};
 
-export default function Header({ logoUrl }: HeaderProps) {
-  const [isOpen, setIsOpen] = useState(false);
+export default function MobileMenu({ isOpen, setIsOpen }: MobileMenuProps) {
   const pathname = usePathname();
-  const isHome = pathname === "/";
 
   const classNames = [
-    "w-full",
-    "flex",
-    "flex-col",
-    "items-center",
-    "justify-between",
     "fixed",
-    "z-1",
-    "h-[130px]",
+    "w-screen",
+    "h-screen",
+    "bg-black",
     "top-0",
-    'py-[20px]',
-    isHome ? "top-[calc(50%-65px)]" : "",
-    "transition-top",
+    "left-0",
+    "z-1000",
+    isOpen ? "translate-x-0" : "translate-x-full",
+    "transition-transform",
     "duration-200",
-    "z-100",
+    "ease-in-out",
+    "flex",
+    "items-center",
+    "justify-center",
   ].filter(Boolean);
 
   return (
-    <header className={classNames.join(" ")}>
-      <Link href={"/"}>
-        <Image
-          src={logoUrl}
-          alt="120 Production"
-          width={240}
-          height={0}
-          priority
-          className="h-auto"
-        />
-      </Link>
-
-      <Menu size={48} color="white" className="sm:hidden cursor-pointer" onClick={() => setIsOpen(!isOpen)} />
-      <MobileMenu isOpen={isOpen} setIsOpen={setIsOpen} />
-      <nav className="hidden sm:flex sm:gap-4">
+    <div className={classNames.join(" ")}>
+      <nav className="flex flex-col items-center gap-4">
         {[
           { href: "/projets", label: "PROJETS" },
           { href: "/nos-references", label: "NOUS" },
@@ -73,15 +56,13 @@ export default function Header({ logoUrl }: HeaderProps) {
           ].filter(Boolean).join(" ");
           return (
             <div key={href}>
-              <Link href={href} className={classNames}>
+              <Link href={href} className={classNames} onClick={() => setIsOpen(false)}>
                 {label}
               </Link>
             </div>
           );
         })}
-      </nav>
-
-
-    </header>
+      </nav>      
+    </div>
   );
 }
