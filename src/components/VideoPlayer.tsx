@@ -1,8 +1,20 @@
 "use client";
 
 import MuxPlayer from "@mux/mux-player-react";
-import ReactPlayer from "react-player/youtube";
+import dynamic from "next/dynamic";
 
+const ReactPlayer = dynamic(() => import("react-player/youtube"), {
+  ssr: false,
+});
+
+type VideoProps = {
+  type: "mux" | "youtube" | "local";
+  playbackId?: string;
+  youtubeUrl?: string;
+  src?: string;
+  width?: string | number;
+  height?: string | number;
+};
 
 export default function Video({
   type,
@@ -11,26 +23,18 @@ export default function Video({
   src,
   width = "100%",
   height = "auto",
-}: {
-  type: "mux" | "youtube" | "local";
-  playbackId?: string;
-  youtubeUrl?: string;
-  src?: string;
-  width?: string | number;
-  height?: string | number;
-}) {
+}: VideoProps) {
   if (type === "youtube" && youtubeUrl) {
     return (
-      <ReactPlayer
-        url={youtubeUrl}
-        width="100%"
-        height="100%"
-        playing={true}
-        controls
-        style={{
-          aspectRatio: "16/9", // CSS natif (équivaut à Tailwind aspect-video)
-        }}
-      />
+      <div style={{ width, height: "auto", aspectRatio: "16/9" }}>
+        <ReactPlayer
+          url={youtubeUrl}
+          width="100%"
+          height="100%"
+          playing
+          controls
+        />
+      </div>
     );
   }
 
@@ -40,7 +44,11 @@ export default function Video({
         playbackId={playbackId}
         streamType="on-demand"
         autoPlay
-        style={{ width, height }}
+        style={{
+          width,
+          height,
+          aspectRatio: "16/9",
+        }}
       />
     );
   }
@@ -49,12 +57,13 @@ export default function Video({
     return (
       <video
         src={src}
-        width={width}
-        height={height}
+        width={typeof width === "number" ? width : undefined}
+        height={typeof height === "number" ? height : undefined}
         controls
         autoPlay
         playsInline
-        className="rounded-lg shadow"
+        className="rounded-lg shadow w-full h-auto"
+        style={{ aspectRatio: "16/9" }}
       />
     );
   }
