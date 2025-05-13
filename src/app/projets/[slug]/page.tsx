@@ -1,8 +1,12 @@
+export const dynamic = "force-dynamic"; 
+export const dynamicParams = true; 
 import { fetchStrapi, API_URL } from "@/lib/api";
 import Video from "@/components/VideoPlayer";
 
-export default async function Page({ params }: { params: { slug: string } }) {
-  const { slug } = params;
+export default async function Page(
+  props: { params: Promise<{ slug: string }> }   // ← typé comme Promise
+) {
+  const { slug } = await props.params;
 
   const query = `filters[slug][$eq]=${slug}&populate=ressources.media&populate[1]=ressources.mux_asset`;
   const json = await fetchStrapi<{ data: any }>(`/projets?${query}`);
@@ -11,7 +15,6 @@ export default async function Page({ params }: { params: { slug: string } }) {
 
   const projet = json.data[0];
   const ressources = projet.ressources || [];
-  console.log(ressources);
 
   const primary = ressources.find((r: any) => r.ordre === 1);
   const others = ressources
