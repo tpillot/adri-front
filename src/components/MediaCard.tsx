@@ -1,7 +1,7 @@
 // components/MediaCard.tsx
 "use client";
 
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import Link from "next/link";
 import { Jost, Poppins } from "next/font/google";
 
@@ -19,13 +19,21 @@ type Props = {
 export default function MediaCard({ thumbnailUrl, slug, titre, sous_titre, isVideo }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
+  const isMobile = typeof window !== "undefined" && /iPhone|Android|Mobile/i.test(navigator.userAgent);
+
+  useEffect(() => {
+    if (isMobile && videoRef.current) {
+      videoRef.current.play().catch(() => {});
+    }
+  }, []);
+
   return (
     <Link
       href={`/projets/${slug}`}
       className="group relative block w-full h-[620px] bg-cover bg-center overflow-hidden cursor-pointer"
       style={!isVideo ? { backgroundImage: `url('${thumbnailUrl}')` } : undefined}
       onMouseEnter={() => videoRef.current?.play()}
-      //onMouseLeave={() => videoRef.current?.pause()}
+      onMouseLeave={() => videoRef.current?.pause()}
     >
       {isVideo && (
         <video
