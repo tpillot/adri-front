@@ -32,11 +32,11 @@ export default function MobileMenu({ isOpen, setIsOpen }: MobileMenuProps) {
     <div className={classNames.join(" ")}>
       <nav className="flex flex-col items-center gap-4">
         {[
-          { href: "/projets", label: "PROJETS" },
-          { href: "/nos-references", label: "NOUS" },
-          { href: "/contact", label: "CONTACT" },
-          { href: "/backstage", label: "BACKSTAGE" },
-          { href: "/shop", label: "SHOP" },
+           { href: "/projets",        label: "PROJETS" },
+           { href: "/nos-references", label: "NOUS"    },
+           { href: "/studio",         label: "STUDIO"  },
+           { href: "/shop",           label: "SHOP"    },
+           { href: "/contact",        label: "CONTACT" },
         ].map(({ href, label }) => {
           const isActive = pathname.startsWith(href);
           const classNames = [
