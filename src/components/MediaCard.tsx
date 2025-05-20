@@ -25,7 +25,7 @@ export default function MediaCard({ thumbnailUrl, slug, titre, sous_titre, isVid
       className="group relative block w-full h-[620px] bg-cover bg-center overflow-hidden cursor-pointer"
       style={!isVideo ? { backgroundImage: `url('${thumbnailUrl}')` } : undefined}
       onMouseEnter={() => videoRef.current?.play()}
-      onMouseLeave={() => videoRef.current?.pause()}
+      //onMouseLeave={() => videoRef.current?.pause()}
     >
       {isVideo && (
         <video
