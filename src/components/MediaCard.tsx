@@ -1,7 +1,6 @@
-// components/MediaCard.tsx
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import Link from "next/link";
 import { Jost, Poppins } from "next/font/google";
 
@@ -18,36 +17,44 @@ type Props = {
 
 export default function MediaCard({ thumbnailUrl, slug, titre, sous_titre, isVideo }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [canPlay, setCanPlay] = useState(false);
 
-  const isMobile = typeof window !== "undefined" && /iPhone|Android|Mobile/i.test(navigator.userAgent);
+  const isMobile = typeof window !== "undefined" &&
+                   /Android|iPhone|iPad|Mobile/i.test(navigator.userAgent);
 
+  /* ► lance l’auto-play sur mobile quand la vidéo est prête */
   useEffect(() => {
-    if (isMobile && videoRef.current) {
+    if (isMobile && videoRef.current && canPlay) {
       videoRef.current.play().catch(() => {});
     }
-  }, []);
+  }, [isMobile, canPlay]);
 
   return (
     <Link
       href={`/projets/${slug}`}
       className="group relative block w-full h-[620px] bg-cover bg-center overflow-hidden cursor-pointer"
-      style={!isVideo ? { backgroundImage: `url('${thumbnailUrl}')` } : undefined}
+      /* ► on laisse TOUJOURS l’image de fond pour servir de fallback */
+      style={{ backgroundImage: `url('${thumbnailUrl}')` }}
       onMouseEnter={() => videoRef.current?.play()}
       onMouseLeave={() => videoRef.current?.pause()}
     >
       {isVideo && (
         <video
           ref={videoRef}
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full object-cover transition-opacity duration-200"
           muted
           loop
+          playsInline               /* indispensable pour iOS */
           preload="metadata"
+          autoPlay={isMobile}       /* autoPlay seulement sur mobile */
+          poster={thumbnailUrl}     /* fallback affiché tant que la vidéo ne joue pas */
+          onCanPlay={() => setCanPlay(true)}
         >
           <source src={thumbnailUrl} type="video/mp4" />
         </video>
       )}
 
-      {/* bloc texte en bas-droite, animé comme avant */}
+      {/* bloc texte en bas-droite */}
       <div
         className={`${jost.className} absolute bottom-7 right-7 text-right z-10
                     transition-all duration-200 group-hover:opacity-70`}
