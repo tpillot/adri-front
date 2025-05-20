@@ -1,63 +1,86 @@
+// components/MediaCard.tsx
 "use client";
 
 import { useRef, useEffect, useState } from "react";
 import Link from "next/link";
 import { Jost, Poppins } from "next/font/google";
 
-const jost = Jost({ subsets: ["latin"], weight: ["400","500","600","700"], display: "swap" });
+const jost    = Jost({ subsets: ["latin"], weight: ["400","500","600","700"], display: "swap" });
 const poppins = Poppins({ subsets: ["latin"], weight: ["400","500","600","700"], display: "swap" });
 
 type Props = {
-  thumbnailUrl: string;
-  slug: string;
-  titre: string;
+  mediaUrl:   string;  // mp4 ou jpg
+  posterUrl?: string;  // image d’aperçu (pour la vidéo)
+  slug:       string;
+  titre:      string;
   sous_titre: string;
-  isVideo: boolean;
+  isVideo:    boolean;
 };
 
-export default function MediaCard({ thumbnailUrl, slug, titre, sous_titre, isVideo }: Props) {
+export default function MediaCard({
+  mediaUrl,
+  posterUrl,
+  slug,
+  titre,
+  sous_titre,
+  isVideo,
+}: Props) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [canPlay, setCanPlay] = useState(false);
 
-  const isMobile = typeof window !== "undefined" &&
-                   /Android|iPhone|iPad|Mobile/i.test(navigator.userAgent);
+  // détection mobile simplifiée
+  const isMobile =
+    typeof navigator !== "undefined" &&
+    /Android|iPhone|iPad|Mobile/i.test(navigator.userAgent);
 
-  /* ► lance l’auto-play sur mobile quand la vidéo est prête */
+  /* autoplay uniquement sur mobile quand la vidéo est prête */
   useEffect(() => {
     if (isMobile && videoRef.current && canPlay) {
       videoRef.current.play().catch(() => {});
     }
   }, [isMobile, canPlay]);
 
+  /* handlers desktop */
+  const handleEnter = () => {
+    if (!isVideo || isMobile || !videoRef.current) return;
+    videoRef.current.currentTime = 0;
+    videoRef.current.play().catch(() => {});
+  };
+
+  const handleLeave = () => {
+    if (!isVideo || isMobile || !videoRef.current) return;
+    videoRef.current.pause();
+    videoRef.current.currentTime = 0;
+  };
+
   return (
     <Link
       href={`/projets/${slug}`}
-      className="group relative block w-full h-[620px] bg-cover bg-center overflow-hidden cursor-pointer"
-      /* ► on laisse TOUJOURS l’image de fond pour servir de fallback */
-      style={{ backgroundImage: `url('${thumbnailUrl}')` }}
-      onMouseEnter={() => videoRef.current?.play()}
-      onMouseLeave={() => videoRef.current?.pause()}
+      className="group relative block w-full h-[620px] overflow-hidden cursor-pointer bg-cover bg-center"
+      /* fallback image : poster pour vidéo, sinon mediaUrl */
+      style={{ backgroundImage: `url('${isVideo ? posterUrl : mediaUrl}')` }}
+      onMouseEnter={handleEnter}
+      onMouseLeave={handleLeave}
     >
       {isVideo && (
         <video
           ref={videoRef}
-          className="absolute inset-0 w-full h-full object-cover transition-opacity duration-200"
+          className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10"
           muted
           loop
-          playsInline               /* indispensable pour iOS */
+          playsInline                /* indispensable iOS */
           preload="metadata"
-          autoPlay={isMobile}       /* autoPlay seulement sur mobile */
-          poster={thumbnailUrl}     /* fallback affiché tant que la vidéo ne joue pas */
+          autoPlay={isMobile}        /* autoplay mobile */
+          poster={posterUrl}         /* fallback affiché avant lecture */
           onCanPlay={() => setCanPlay(true)}
         >
-          <source src={thumbnailUrl} type="video/mp4" />
+          <source src={mediaUrl} type="video/mp4" />
         </video>
       )}
 
       {/* bloc texte en bas-droite */}
       <div
-        className={`${jost.className} absolute bottom-7 right-7 text-right z-10
-                    transition-all duration-200 group-hover:opacity-70`}
+        className={`${jost.className} absolute bottom-7 right-7 text-right z-20 transition-opacity duration-200 group-hover:opacity-70`}
       >
         <span className={`${poppins.className} block text-[15px] font-medium leading-tight`}>
           {titre}

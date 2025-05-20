@@ -5,20 +5,25 @@ import MediaCard from "@/components/MediaCard";
 export default async function Page() {
   const json = await fetchStrapi<{ data: any }>("/projets?populate=*");
   const projets = json.data.sort((a: any, b: any) => a.ordre - b.ordre);
+  console.log("projets", projets);
 
   return (
     <main className="relative w-screen">
       <div className="flex flex-col">
-        {projets.map((f: any, index: number) => {
-          const url = `${API_URL}${f.thumbnail.url}`;
-          const isVideo = url.endsWith(".mp4");
+        {projets.map((p: any, index: number) => {
+          console.log(p);
+          const mediaUrl = `${API_URL}${p.media.url}`;
+          const posterUrl = p.poster?.url ? `${API_URL}${p.poster.url}` : undefined;
+          const isVideo = mediaUrl.endsWith(".mp4");
+
           return (
             <MediaCard
               key={index}
-              thumbnailUrl={url}
-              slug={f.slug}
-              titre={f.titre}
-              sous_titre={f.sous_titre}
+              mediaUrl={mediaUrl}
+              posterUrl={posterUrl}
+              slug={p.slug}
+              titre={p.titre}
+              sous_titre={p.sous_titre}
               isVideo={isVideo}
             />
           );
