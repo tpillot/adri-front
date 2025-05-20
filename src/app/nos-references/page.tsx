@@ -9,7 +9,6 @@ export default async function Page() {
   const { data: photoData } = await fetchStrapi<{ data: any }>(
     "/nous?populate=backstage_photos.image"
   );
-  console.log(generalData);
 
   return (
     <main className="w-screen min-h-screen flex flex-col pt-[150px]">

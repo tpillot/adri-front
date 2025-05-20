@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['localhost', '51.91.249.254'],
+    domains: ['cms.120-production.com'],
   },
 };
 
