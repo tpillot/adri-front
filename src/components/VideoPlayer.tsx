@@ -12,8 +12,6 @@ type VideoProps = {
   playbackId?: string;
   youtubeUrl?: string;
   src?: string;
-  width?: string | number;
-  height?: string | number;
 };
 
 export default function Video({
@@ -21,18 +19,23 @@ export default function Video({
   playbackId,
   youtubeUrl,
   src,
-  width = "100%",
-  height = "auto",
 }: VideoProps) {
+
+  const wrapperClass =
+    "relative w-full h-[100vh] md:h-auto overflow-hidden rounded-lg shadow";
+
+  const innerStyle: React.CSSProperties = { position: "absolute", inset: 0 };
+
   if (type === "youtube" && youtubeUrl) {
     return (
-      <div style={{ width, height: "auto", aspectRatio: "16/9" }}>
+      <div className={wrapperClass} style={{ aspectRatio: "16/9" }}>
         <ReactPlayer
           url={youtubeUrl}
-          width="100%"
-          height="100%"
           playing
           controls
+          width="100%"
+          height="100%"
+          style={innerStyle}
         />
       </div>
     );
@@ -40,31 +43,29 @@ export default function Video({
 
   if (type === "mux" && playbackId) {
     return (
-      <MuxPlayer
-        playbackId={playbackId}
-        streamType="on-demand"
-        autoPlay
-        style={{
-          width,
-          height,
-          aspectRatio: "16/9",
-        }}
-      />
+      <div className={wrapperClass} style={{ aspectRatio: "16/9" }}>
+        <MuxPlayer
+          playbackId={playbackId}
+          streamType="on-demand"
+          autoPlay
+          className="w-full h-full"
+          style={innerStyle}
+        />
+      </div>
     );
   }
 
   if (type === "local" && src) {
     return (
-      <video
-        src={src}
-        width={typeof width === "number" ? width : undefined}
-        height={typeof height === "number" ? height : undefined}
-        controls
-        autoPlay
-        playsInline
-        className="rounded-lg shadow w-full h-auto"
-        style={{ aspectRatio: "16/9" }}
-      />
+      <div className={wrapperClass} style={{ aspectRatio: "16/9" }}>
+        <video
+          src={src}
+          controls
+          autoPlay
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+      </div>
     );
   }
 

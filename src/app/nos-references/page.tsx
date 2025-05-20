@@ -1,31 +1,85 @@
+import Image from "next/image";
 import { fetchStrapi, API_URL } from "@/lib/api";
 
 export default async function Page() {
-  const json = await fetchStrapi<{
-    data: any;
-  }>("/nous?populate=*");
+  const { data: generalData } = await fetchStrapi<{ data: any }>(
+    "/nous?populate=*"
+  );
+
+  const { data: photoData } = await fetchStrapi<{ data: any }>(
+    "/nous?populate=backstage_photos.image"
+  );
+  console.log(generalData);
 
   return (
-    <main className="relative h-screen w-screen pt-[150px] flex flex-col lg:pr-[50px] lg:flex-row">
-      <div className="flex flex-col flex-1 px-[20px] sm:px-[100px] py-[50px]">
-        <p className="text-[40px] leading-[1.2]">
-          {json.data.titre}
-        </p>
+    <main className="w-screen min-h-screen flex flex-col pt-[150px]">
+      <section className="w-full bg-black text-white flex flex-col lg:flex-row items-start px-5 md:pl-[15%] py-12 gap-10">
+        <p className="flex-1 text-lg md:text-xl lg:text-3xl font-semibold leading-snug">
+        {generalData.titre}
+      </p>
 
-        <p className="text-lg mt-[40px] whitespace-pre-line leading-[1.2] font-thin">
-          {json.data.presentation}
-        </p>
 
-        <div className="flex flex-col mt-[40px]">
-          {json.data.domaines.map((f: any, index: number) => {
-            return (
-              <p key={index} className="text-lg font-bold">{f.nom}</p>
-            );
-          })}
+        <p className="flex-1 text-sm lg:text-base font-light whitespace-pre-line leading-relaxed">
+          {generalData.presentation}
+        </p>
+      </section>
+
+      <section className="relative w-full">
+        <div className="relative w-full h-[50vh] md:h-[60vh] lg:h-[75vh] xl:h-[80vh]">
+          <video
+            className="absolute inset-0 w-full h-full object-cover"
+            src={`${API_URL}${generalData.teaser?.url}`}
+            autoPlay
+            muted
+            loop
+            playsInline
+          />
+
+          <div className="absolute inset-y-0 left-0 w-full lg:w-1/2 flex items-center px-5 md:pl-[15%]">
+            <ul className="grid grid-cols-2 gap-2 text-white text-sm lg:text-base font-medium">
+              {generalData.domaines?.map((d: any, i: number) => (
+                <li key={i}>{d.nom}</li>
+              ))}
+            </ul>
+          </div>
         </div>
-      </div>
+      </section>
 
-      <div className="bg-cover bg-center h-[500px] lg:h-full lg:w-[40%] rounded-sm shrink-0" style={{ backgroundImage: `url('${API_URL}${json.data.photo.url}')` }}></div>
+      <section className="w-full bg-black text-white flex flex-col lg:flex-row items-start px-5 md:pl-[15%] py-12 gap-10 pr-10">
+        <p className="flex-1 text-sm lg:text-base font-light whitespace-pre-line leading-snug">
+          {generalData.presentation_2}
+        </p>
+      </section>
+
+
+
+      {photoData.backstage_photos?.length > 0 && (
+        <section className="w-full">
+          <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-0">
+            {photoData.backstage_photos.slice(0, 12).map((item: any, i: number) => {
+              const image = item.image;
+              if (!image?.url) return null;
+
+              return (
+                <div
+                  key={i}
+                  className="relative w-full pt-[150%] overflow-hidden"
+                >
+                  <Image
+                    src={`${API_URL}${image.url}`}
+                    alt={`Backstage ${i + 1}`}
+                    fill
+                    className="object-cover"
+                    sizes="(min-width:1024px) 16.66vw,
+                           (min-width:640px) 25vw,
+                           33vw"
+                  />
+                </div>
+              );
+            })}
+          </div>
+        </section>
+      )}
     </main>
   );
 }
