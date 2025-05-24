@@ -21,6 +21,10 @@ import { ReactNode } from "react";
 export const metadata = {
   title: "120 Production",
   description: "Société de production audiovisuelle",
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+  },
 };
 
 async function getLogo(): Promise<string> {

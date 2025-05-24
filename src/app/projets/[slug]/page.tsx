@@ -39,7 +39,7 @@ export default async function Page(
           <img
             src={`${API_URL}${primary.media.url}`}
             alt={primary.legende || "Image"}
-            className="w-full h-auto object-cover"
+            className="w-full h-[90vh] object-cover"
           />
         )}
       </div>

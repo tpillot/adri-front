@@ -50,12 +50,10 @@ export default async function Page() {
         </p>
       </section>
 
-
-
       {photoData.backstage_photos?.length > 0 && (
         <section className="w-full">
-          <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-0">
-            {photoData.backstage_photos.slice(0, 12).map((item: any, i: number) => {
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-0">
+            {photoData.backstage_photos.map((item: any, i: number) => {
               const image = item.image;
               if (!image?.url) return null;
 
@@ -70,8 +68,8 @@ export default async function Page() {
                     fill
                     className="object-cover"
                     sizes="(min-width:1024px) 16.66vw,
-                           (min-width:640px) 25vw,
-                           33vw"
+                          (min-width:768px) 25vw,
+                          50vw"
                   />
                 </div>
               );
