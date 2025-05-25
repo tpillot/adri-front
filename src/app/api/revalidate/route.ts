@@ -5,12 +5,13 @@ const API_URL = 'https://cms.120-production.com/api';
 const REVALIDATE_SECRET = '0fbf9f4ee273af67f6121903a283a270f8e4baea2b057d694310a92be7362968';
 
 async function fetchSlugs(): Promise<string[]> {
-  const res = await fetch(`${API_URL}/projets?fields[0]=slug&pagination[pageSize]=100`);
-
+  const res = await fetch(
+    "https://cms.120-production.com/api/projets?fields[0]=slug&pagination[pageSize]=100"
+  );
   if (!res.ok) throw new Error("Erreur fetch slugs");
 
   const json = await res.json();
-  return json.data.map((item: any) => item.attributes.slug);
+  return json.data.map((item: any) => item.slug);
 }
 
 export async function POST(req: NextRequest) {
