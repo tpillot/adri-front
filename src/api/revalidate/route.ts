@@ -15,6 +15,7 @@ async function fetchSlugs(): Promise<string[]> {
 
 export async function POST(req: NextRequest) {
   const secret = req.nextUrl.searchParams.get("secret");
+  console.log("Webhook reçu !");
 
   if (secret !== REVALIDATE_SECRET) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
