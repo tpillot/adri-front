@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 
-const API_URL = process.env.API_URL!;
+const API_URL = process.env.NEXT_PUBLIC_API_URL!;
 const REVALIDATE_SECRET = process.env.REVALIDATE_SECRET!;
 
 async function fetchSlugs(): Promise<string[]> {
