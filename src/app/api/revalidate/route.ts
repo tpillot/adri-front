@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL!;
-const REVALIDATE_SECRET = process.env.REVALIDATE_SECRET!;
+const API_URL = 'https://cms.120-production.com/api';
+const REVALIDATE_SECRET = '0fbf9f4ee273af67f6121903a283a270f8e4baea2b057d694310a92be7362968';
 
 async function fetchSlugs(): Promise<string[]> {
   const res = await fetch(`${API_URL}/projets?fields[0]=slug&pagination[pageSize]=100`);
