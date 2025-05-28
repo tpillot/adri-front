@@ -9,8 +9,8 @@ const jost    = Jost({ subsets: ["latin"], weight: ["400","500","600","700"], di
 const poppins = Poppins({ subsets: ["latin"], weight: ["400","500","600","700"], display: "swap" });
 
 type Props = {
-  mediaUrl:   string;  // mp4 ou jpg
-  posterUrl?: string;  // image d’aperçu (pour la vidéo)
+  mediaUrl:   string;  
+  posterUrl?: string;  
   slug:       string;
   titre:      string;
   sous_titre: string;
@@ -56,8 +56,7 @@ export default function MediaCard({
   return (
     <Link
       href={`/projets/${slug}`}
-      className="group relative block w-full h-[620px] overflow-hidden cursor-pointer bg-cover bg-center"
-      /* fallback image : poster pour vidéo, sinon mediaUrl */
+      className="group relative block w-full h-[710px] overflow-hidden cursor-pointer bg-cover bg-center"
       style={{ backgroundImage: `url('${isVideo ? posterUrl : mediaUrl}')` }}
       onMouseEnter={handleEnter}
       onMouseLeave={handleLeave}
@@ -68,17 +67,16 @@ export default function MediaCard({
           className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10"
           muted
           loop
-          playsInline                /* indispensable iOS */
+          playsInline          
           preload="metadata"
-          autoPlay={isMobile}        /* autoplay mobile */
-          poster={posterUrl}         /* fallback affiché avant lecture */
+          autoPlay={isMobile}  
+          poster={posterUrl}   
           onCanPlay={() => setCanPlay(true)}
         >
           <source src={mediaUrl} type="video/mp4" />
         </video>
       )}
 
-      {/* bloc texte en bas-droite */}
       <div
         className={`${jost.className} absolute bottom-7 right-7 text-right z-20 transition-opacity duration-200 group-hover:opacity-70`}
       >
